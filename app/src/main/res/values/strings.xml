@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Visit Curitiba</string>
+    <string name="s_name">Qual é o seu nome?</string>
+    <string name="s_lets_go">Let\'s go!</string>
+    <string name="s_welcome_message">Bem vindo </string>
+    <string name="s_map">Mapa</string>
+
+    <string name="s_botanic_park">Jardim Botânico de Curitiba</string>
+    <string name="s_botanic_park_address">Av. Professor Lothario Meissner x Rua Engenheiro Ostoja Roguski</string>
+    <string name="s_opera_arame">Ópera de Arame</string>
+    <string name="s_opera_arame_address">Rua João Gava, s/n\°. - Abranches</string>
+    <string name="s_panoramic_tower">Torre Panorâmica</string>
+    <string name="s_panoramic_tower_address">Rua Professor Lycio Grein Castro Vellozo, 191</string>
+    <string name="s_museum_oscar_niemeyer">Museu Oscar Niemeyer</string>
+    <string name="s_museum_oscar_niemeyer_address">R. Marechal Hermes, 999</string>
+    <string name="s_tangua_park">Parque Tanguá</string>
+    <string name="s_tangua_park_address">Rua Oswaldo Maciel, 0</string>
+    <string name="s_bacacheri_park">Parque Bacacheri</string>
+    <string name="s_bacacheri_park_address">Rua Paulo Nadolny.</string>
+    <string name="s_barigui_park">Parque Barigui</string>
+    <string name="s_barigui_park_address">Avenida Candido Hartmann</string>
+
+</resources>
