@@ -4,6 +4,7 @@
     <string name="s_lets_go">Let\'s go!</string>
     <string name="s_welcome_message">Bem vindo </string>
     <string name="s_map">Mapa</string>
+    <string name="s_name_empty">Escreva seu nome</string>
 
     <string name="s_botanic_park">Jardim Botânico de Curitiba</string>
     <string name="s_botanic_park_address">Av. Professor Lothario Meissner x Rua Engenheiro Ostoja Roguski</string>
