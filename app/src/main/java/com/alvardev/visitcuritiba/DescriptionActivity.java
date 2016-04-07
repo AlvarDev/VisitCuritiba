@@ -3,6 +3,7 @@ package com.alvardev.visitcuritiba;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -17,6 +18,7 @@ public class DescriptionActivity extends AppCompatActivity {
     private TextView tvAddress;
     private Button btMap;
 
+    private Toolbar toolbar;
     private PlaceEntity place;
 
     @Override
@@ -26,6 +28,7 @@ public class DescriptionActivity extends AppCompatActivity {
 
         place = (PlaceEntity)getIntent().getSerializableExtra("place");
         setUI();
+        setToolbar();
         setData(place);
         setActions();
     }
@@ -35,6 +38,11 @@ public class DescriptionActivity extends AppCompatActivity {
         tvName = (TextView) findViewById(R.id.tv_name);
         tvAddress = (TextView) findViewById(R.id.tv_address);
         btMap = (Button) findViewById(R.id.bt_map);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+    }
+
+    private void setToolbar(){
+        setSupportActionBar(toolbar);
     }
 
     private void setData(PlaceEntity place){

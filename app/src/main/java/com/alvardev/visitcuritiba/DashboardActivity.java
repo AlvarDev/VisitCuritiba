@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
@@ -23,6 +24,7 @@ public class DashboardActivity extends AppCompatActivity {
     private CardView cvBacacheriPark;
     private CardView cvBariguiPark;
 
+    private Toolbar toolbar;
     private List<PlaceEntity> places;
 
     @Override
@@ -33,6 +35,7 @@ public class DashboardActivity extends AppCompatActivity {
         String name  = getIntent().getStringExtra("name");
         setUI();
         setWelcomeName(name);
+        setToolbar();
         places = getPlaces();
         setActions();
     }
@@ -47,10 +50,16 @@ public class DashboardActivity extends AppCompatActivity {
         cvTanguaPark = (CardView) findViewById(R.id.cv_tangua_park);
         cvBacacheriPark = (CardView) findViewById(R.id.cv_bacacheri_park);
         cvBariguiPark = (CardView) findViewById(R.id.cv_barigui_park);
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
     }
 
     private void setWelcomeName(String name){
         tvWelcome.append(" " + name);
+    }
+
+    private void setToolbar(){
+        setSupportActionBar(toolbar);
     }
 
     private void setActions(){
