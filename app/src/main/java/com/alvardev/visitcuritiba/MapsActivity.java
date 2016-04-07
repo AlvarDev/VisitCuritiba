@@ -3,6 +3,7 @@ package com.alvardev.visitcuritiba;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
+import com.alvardev.visitcuritiba.entities.PlaceEntity;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -14,11 +15,15 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    private PlaceEntity place;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
+        place = (PlaceEntity) getIntent().getSerializableExtra("place");
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -40,11 +45,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
 
         // Add a marker in Sydney and move the camera
-        LatLng place = new LatLng(-25.4430871,-49.2403687);
-        mMap.addMarker(new MarkerOptions().position(place).title("Marker in [Nome]"));
+        LatLng latlng = new LatLng(place.getLat(), place.getLng());
+        mMap.addMarker(new MarkerOptions().position(latlng).title(place.getName()));
 
         CameraPosition cameraPosition = new CameraPosition.Builder()
-                .target(new LatLng(place.latitude, place.longitude))      // Sets the center of the map to Mountain View
+                .target(new LatLng(place.getLat(), place.getLng()))      // Sets the center of the map to Mountain View
                 .zoom(16)                   // Sets the zoom
                 .tilt(45)                   // Sets the tilt of the camera to 30 degrees
                 .build();
