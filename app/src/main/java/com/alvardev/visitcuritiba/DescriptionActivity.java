@@ -1,7 +1,10 @@
 package com.alvardev.visitcuritiba;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -10,6 +13,7 @@ public class DescriptionActivity extends AppCompatActivity {
     private ImageView ivPicture;
     private TextView tvName;
     private TextView tvAddress;
+    private Button btMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,12 +23,14 @@ public class DescriptionActivity extends AppCompatActivity {
         int id  = getIntent().getIntExtra("id", R.id.cv_botanic_park);
         setUI();
         setData(id);
+        setActions();
     }
 
     private void setUI(){
         ivPicture = (ImageView) findViewById(R.id.iv_picture);
         tvName = (TextView) findViewById(R.id.tv_name);
         tvAddress = (TextView) findViewById(R.id.tv_address);
+        btMap = (Button) findViewById(R.id.bt_map);
     }
 
     private void setData(int id){
@@ -76,5 +82,20 @@ public class DescriptionActivity extends AppCompatActivity {
         tvAddress.setText(address);
 
     }
+
+    private void setActions(){
+        btMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToMaps();
+            }
+        });
+    }
+
+    private void goToMaps(){
+        Intent intent = new Intent(DescriptionActivity.this, MapsActivity.class);
+        startActivity(intent);
+    }
+
 
 }

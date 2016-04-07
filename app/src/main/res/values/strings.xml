@@ -20,5 +20,6 @@
     <string name="s_bacacheri_park_address">Rua Paulo Nadolny.</string>
     <string name="s_barigui_park">Parque Barigui</string>
     <string name="s_barigui_park_address">Avenida Candido Hartmann</string>
+    <string name="title_activity_maps">Map</string>
 
 </resources>
