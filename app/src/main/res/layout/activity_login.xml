@@ -24,6 +24,7 @@
         android:src="@drawable/img_curitiba" />
 
     <EditText
+        android:id="@+id/et_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/margin"
@@ -32,6 +33,7 @@
         android:inputType="textPersonName" />
 
     <Button
+        android:id="@+id/btn_lets_go"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorAccent"

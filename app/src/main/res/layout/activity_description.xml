@@ -14,9 +14,11 @@
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         android:elevation="4dp"
-        app:layout_scrollFlags="scroll|enterAlways" />
+        app:layout_scrollFlags="scroll|enterAlways"
+        app:titleTextColor="@color/white" />
 
     <ImageView
+        android:id="@+id/iv_picture"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:contentDescription="@string/app_name"
@@ -41,6 +43,7 @@
                 android:padding="@dimen/padding">
 
                 <TextView
+                    android:id="@+id/tv_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -49,6 +52,7 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/tv_address"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/margin"
@@ -56,13 +60,14 @@
                     android:text="@string/s_botanic_park_address" />
 
                 <Button
+                    android:id="@+id/bt_map"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="@dimen/margin"
                     android:background="@color/colorAccent"
                     android:text="@string/s_map"
-                    android:textColor="@color/white"
-                    android:layout_marginTop="@dimen/margin"
-                    android:layout_marginBottom="8dp"/>
+                    android:textColor="@color/white" />
 
             </LinearLayout>
 
