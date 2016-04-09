@@ -8,20 +8,34 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import com.alvardev.visitcuritiba.adapters.PlaceAdapter;
 import com.alvardev.visitcuritiba.entities.PlaceEntity;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DashboardActivity extends AppCompatActivity {
+public class DashboardActivity extends AppCompatActivity implements Response.Listener<String>,
+        Response.ErrorListener{
 
+    private static final String TAG = "DashboardActivity";
     private RecyclerView rvPlaces;
     private Toolbar toolbar;
+    private TextView tviNoResults;
+    private View progressBar;
     private List<PlaceEntity> places;
+    private RequestQueue queue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,13 +45,15 @@ public class DashboardActivity extends AppCompatActivity {
         String name  = getIntent().getStringExtra("name");
         setUI();
         setToolbar(name);
-        places = getPlaces();
+        getPlaces();
         setRecyclerView();
     }
 
     private void setUI(){
         rvPlaces = (RecyclerView) findViewById(R.id.rv_places);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        tviNoResults = (TextView) findViewById(R.id.tvi_no_results);
+        progressBar = findViewById(R.id.progress_bar);
     }
 
     private void setToolbar(String name){
@@ -50,7 +66,7 @@ public class DashboardActivity extends AppCompatActivity {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         rvPlaces.setLayoutManager(mLayoutManager);
 
-        PlaceAdapter mAdapter = new PlaceAdapter(places);
+        PlaceAdapter mAdapter = new PlaceAdapter(places, DashboardActivity.this);
         mAdapter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -60,6 +76,7 @@ public class DashboardActivity extends AppCompatActivity {
 
         rvPlaces.setAdapter(mAdapter);
         rvPlaces.setItemAnimator(new DefaultItemAnimator());
+        rvPlaces.setVisibility(View.VISIBLE);
     }
 
     private void goToDescription(PlaceEntity place){
@@ -68,74 +85,85 @@ public class DashboardActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private List<PlaceEntity> getPlaces(){
+    private void getPlaces(){
+        places = new ArrayList<>();
+        queue = Volley.newRequestQueue(this);
+        progressBar.setVisibility(View.VISIBLE);
 
-        List<PlaceEntity> placesTemp = new ArrayList<>();
-        PlaceEntity place = new PlaceEntity();
+        String urlNotas = "https://raw.githubusercontent.com/AlvarDev/HostJson/master/places.js";
+        StringRequest stringRequest = new StringRequest(
+                Request.Method.GET,
+                urlNotas,
+                this,
+                this);
+        stringRequest.setTag("places");
+        queue.add(stringRequest);
 
-        //Jardim Botânico de Curitiba
-        place.setName(getString(R.string.s_botanic_park));
-        place.setAddress(getString(R.string.s_botanic_park_address));
-        place.setIdImage(R.drawable.img_botanic_park_afternoon);
-        place.setLat(-25.4430871);
-        place.setLng(-49.2403687);
-        placesTemp.add(place);
-
-        //Ópera de Arame
-        place = new PlaceEntity();
-        place.setName(getString(R.string.s_opera_arame));
-        place.setAddress(getString(R.string.s_opera_arame_address));
-        place.setIdImage(R.drawable.img_opera_arame);
-        place.setLat(-25.385076);
-        place.setLng(-49.276626);
-        placesTemp.add(place);
-
-        //Torre Panorâmica
-        place = new PlaceEntity();
-        place.setName(getString(R.string.s_panoramic_tower));
-        place.setAddress(getString(R.string.s_panoramic_tower_address));
-        place.setIdImage(R.drawable.img_panoramic_tower);
-        place.setLat(-25.424180);
-        place.setLng(-49.294361);
-        placesTemp.add(place);
-
-        //Museu Oscar Niemeyer
-        place = new PlaceEntity();
-        place.setName(getString(R.string.s_museum_oscar_niemeyer));
-        place.setAddress(getString(R.string.s_museum_oscar_niemeyer_address));
-        place.setIdImage(R.drawable.img_museum_oscar_niemeyer);
-        place.setLat(-25.410412);
-        place.setLng(-49.266944);
-        placesTemp.add(place);
-
-        //Parque Tanguá
-        place = new PlaceEntity();
-        place.setName(getString(R.string.s_tangua_park));
-        place.setAddress(getString(R.string.s_tangua_park_address));
-        place.setIdImage(R.drawable.img_tangua_park);
-        place.setLat(-25.378820);
-        place.setLng(-49.281578);
-        placesTemp.add(place);
-
-        //Parque Bacacheri
-        place = new PlaceEntity();
-        place.setName(getString(R.string.s_bacacheri_park));
-        place.setAddress(getString(R.string.s_bacacheri_park_address));
-        place.setIdImage(R.drawable.img_bacacheri_park);
-        place.setLat(-25.391102);
-        place.setLng(-49.232866);
-        placesTemp.add(place);
-
-        //Parque Barigui
-        place = new PlaceEntity();
-        place.setName(getString(R.string.s_barigui_park));
-        place.setAddress(getString(R.string.s_barigui_park_address));
-        place.setIdImage(R.drawable.img_barigui_park);
-        place.setLat(-25.423012);
-        place.setLng(-49.308713);
-        placesTemp.add(place);
-
-        return placesTemp;
     }
+
+
+    @Override
+    public void onResponse(String response) {
+        progressBar.setVisibility(View.GONE);
+
+        try {
+            //if(!response.equalsIgnoreCase("EMPTY_COURSES")) {
+            PlaceResponse rs = new Gson().fromJson(response, PlaceResponse.class);
+            if(rs.isSuccess()){
+                places = rs.getPlaces();
+                setRecyclerView();
+            }else{
+                tviNoResults.setVisibility(View.VISIBLE);
+            }
+
+            //}else{
+            //    tviNoResults.setVisibility(View.VISIBLE);
+            //}
+        }catch (Exception e){
+            tviNoResults.setVisibility(View.VISIBLE);
+            Log.e(TAG, "Error: " + e.getMessage());
+        }
+    }
+
+
+    @Override
+    public void onErrorResponse(VolleyError volleyError) {
+        progressBar.setVisibility(View.GONE);
+        tviNoResults.setText(getString(R.string.s_general_error_conexion));
+        tviNoResults.setVisibility(View.VISIBLE);
+        Log.e(TAG, "onErrorResponse: " + volleyError.getMessage());
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (queue!=null){
+            queue.cancelAll("places");
+        }
+    }
+
+
+    private class PlaceResponse implements Serializable{
+
+        private boolean success;
+        private List<PlaceEntity> places;
+
+        public boolean isSuccess() {
+            return success;
+        }
+
+        public List<PlaceEntity> getPlaces() {
+            return places;
+        }
+
+        @Override
+        public String toString() {
+            return "PlaceResponse{" +
+                    "success=" + success +
+                    ", places=" + places +
+                    '}';
+        }
+    }
+
 
 }

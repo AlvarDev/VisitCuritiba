@@ -15,10 +15,27 @@
         app:layout_scrollFlags="scroll|enterAlways"
         app:titleTextColor="@color/white" />
 
+    <TextView
+        android:id="@+id/tvi_no_results"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/s_no_results"
+        android:textColor="@color/colorPrimary"
+        android:gravity="center"
+        android:visibility="gone"/>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_places"
         android:layout_below="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
+
+    <include
+        android:id="@+id/progress_bar"
+        android:visibility="gone"
+        layout="@layout/layout_loading"/>
+
+
 
 </RelativeLayout>

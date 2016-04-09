@@ -1,5 +1,6 @@
 package com.alvardev.visitcuritiba.adapters;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 
 import com.alvardev.visitcuritiba.R;
 import com.alvardev.visitcuritiba.entities.PlaceEntity;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -17,9 +19,11 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder>
 
     private List<PlaceEntity> mData;
     private View.OnClickListener listener;
+    private Context context;
 
-    public PlaceAdapter(List<PlaceEntity> myData) {
-        mData = myData;
+    public PlaceAdapter(List<PlaceEntity> myData, Context context) {
+        this.mData = myData;
+        this.context = context;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -46,7 +50,10 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder>
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.ivPicture.setImageResource(mData.get(position).getIdImage());
+        Picasso.with(context)
+                .load(mData.get(position).getUrlImage())
+                .placeholder(R.drawable.img_curitiba)
+                .into(holder.ivPicture);
         holder.tvName.setText(mData.get(position).getName());
         holder.tvAddress.setText(mData.get(position).getAddress());
     }

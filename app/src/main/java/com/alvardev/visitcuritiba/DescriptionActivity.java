@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alvardev.visitcuritiba.entities.PlaceEntity;
+import com.squareup.picasso.Picasso;
 
 public class DescriptionActivity extends AppCompatActivity {
 
@@ -46,7 +47,10 @@ public class DescriptionActivity extends AppCompatActivity {
     }
 
     private void setData(PlaceEntity place){
-        ivPicture.setImageResource(place.getIdImage());
+        Picasso.with(DescriptionActivity.this)
+                .load(place.getUrlImage())
+                .placeholder(R.drawable.img_curitiba)
+                .into(ivPicture);
         tvName.setText(place.getName());
         tvAddress.setText(place.getAddress());
     }

@@ -6,7 +6,7 @@ public class PlaceEntity implements Serializable{
 
     private String name;
     private String address;
-    private int idImage;
+    private String urlImage;
     private double lat;
     private double lng;
 
@@ -29,12 +29,12 @@ public class PlaceEntity implements Serializable{
         this.address = address;
     }
 
-    public int getIdImage() {
-        return idImage;
+    public String getUrlImage() {
+        return urlImage;
     }
 
-    public void setIdImage(int idImage) {
-        this.idImage = idImage;
+    public void setUrlImage(String urlImage) {
+        this.urlImage = urlImage;
     }
 
     public double getLat() {
