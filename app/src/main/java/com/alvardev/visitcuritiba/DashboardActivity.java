@@ -4,10 +4,14 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
+import com.alvardev.visitcuritiba.adapters.PlaceAdapter;
 import com.alvardev.visitcuritiba.entities.PlaceEntity;
 
 import java.util.ArrayList;
@@ -15,15 +19,7 @@ import java.util.List;
 
 public class DashboardActivity extends AppCompatActivity {
 
-    private TextView tvWelcome;
-    private CardView cvBotanicPark;
-    private CardView cvOperaArame;
-    private CardView cvPanoramicTower;
-    private CardView cvMuseumOscarNiemeyer;
-    private CardView cvTanguaPark;
-    private CardView cvBacacheriPark;
-    private CardView cvBariguiPark;
-
+    private RecyclerView rvPlaces;
     private Toolbar toolbar;
     private List<PlaceEntity> places;
 
@@ -34,83 +30,36 @@ public class DashboardActivity extends AppCompatActivity {
 
         String name  = getIntent().getStringExtra("name");
         setUI();
-        setWelcomeName(name);
-        setToolbar();
+        setToolbar(name);
         places = getPlaces();
-        setActions();
+        setRecyclerView();
     }
 
     private void setUI(){
-        tvWelcome = (TextView) findViewById(R.id.tv_welcome);
-
-        cvBotanicPark = (CardView) findViewById(R.id.cv_botanic_park);
-        cvOperaArame = (CardView) findViewById(R.id.cv_opera_arame);
-        cvPanoramicTower = (CardView) findViewById(R.id.cv_panoramic_tower);
-        cvMuseumOscarNiemeyer = (CardView) findViewById(R.id.cv_museum_oscar_niemeyer);
-        cvTanguaPark = (CardView) findViewById(R.id.cv_tangua_park);
-        cvBacacheriPark = (CardView) findViewById(R.id.cv_bacacheri_park);
-        cvBariguiPark = (CardView) findViewById(R.id.cv_barigui_park);
-
+        rvPlaces = (RecyclerView) findViewById(R.id.rv_places);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
     }
 
-    private void setWelcomeName(String name){
-        tvWelcome.append(" " + name);
-    }
-
-    private void setToolbar(){
+    private void setToolbar(String name){
+        toolbar.setTitle(getString(R.string.s_welcome_message) + " " + name);
         setSupportActionBar(toolbar);
     }
 
-    private void setActions(){
-        cvBotanicPark.setOnClickListener(new View.OnClickListener() {
+    private void setRecyclerView(){
+        rvPlaces.setHasFixedSize(true);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
+        rvPlaces.setLayoutManager(mLayoutManager);
+
+        PlaceAdapter mAdapter = new PlaceAdapter(places);
+        mAdapter.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                goToDescription(places.get(0));
+            public void onClick(View view) {
+                goToDescription(places.get(rvPlaces.getChildLayoutPosition(view)));
             }
         });
 
-        cvOperaArame.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goToDescription(places.get(1));
-            }
-        });
-
-        cvPanoramicTower.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goToDescription(places.get(2));
-            }
-        });
-
-        cvMuseumOscarNiemeyer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goToDescription(places.get(3));
-            }
-        });
-
-        cvTanguaPark.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goToDescription(places.get(4));
-            }
-        });
-
-        cvBacacheriPark.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goToDescription(places.get(5));
-            }
-        });
-
-        cvBariguiPark.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goToDescription(places.get(6));
-            }
-        });
+        rvPlaces.setAdapter(mAdapter);
+        rvPlaces.setItemAnimator(new DefaultItemAnimator());
     }
 
     private void goToDescription(PlaceEntity place){
