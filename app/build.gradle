@@ -8,7 +8,7 @@ android {
         applicationId "com.alvardev.visitcuritiba"
         minSdkVersion 18
         targetSdkVersion 23
-        versionCode 1
+        versionCode 4
         versionName "1.0"
     }
     buildTypes {
@@ -17,7 +17,104 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+
+    splits {
+        density {
+            enable true
+            reset()
+            include "mdpi", "hdpi", "xhdpi", "xxhdpi", "xxxhdpi"
+            compatibleScreens 'small', 'normal', 'large', 'xlarge'
+        }
+        abi {
+            enable true
+            reset()
+            include "armeabi-v7a", "x86", "x86_64", "arm64-v8"
+            universalApk false
+        }
+    }
+
 }
+
+ext.additionalDensities = ['xhdpi': ['280'], 'xxhdpi': ['420', '400', '360'], 'xxxhdpi': ['560']]
+ext.densityCodes = ['mdpi': 11, 'hdpi': 12, 'xhdpi': 13, 'xxhdpi': 14, 'xxxhdpi': 15] //##
+ext.abiCodes = ['armeabi-v7a':21, 'arm64-v8':22, x86:23, x86_64:24 ] //--
+
+import com.android.build.OutputFile
+
+
+android.applicationVariants.all { variant ->
+    // assign different version code for each output
+
+    variant.outputs.each { output ->
+
+        def baseDenVersionCode = project.ext.densityCodes.get(output.getFilter(OutputFile.DENSITY))
+        def baseAbiVersionCode = project.ext.abiCodes.get(output.getFilter(OutputFile.ABI))
+
+        if (baseAbiVersionCode != null && baseDenVersionCode != null) {
+            output.versionCodeOverride = baseDenVersionCode * 100000 + variant.versionCode + baseAbiVersionCode * 1000
+            //versionCode = ##--***
+        }
+    }
+
+
+    variant.outputs.each { output ->
+
+
+
+        if (output.getFilter(OutputFile.DENSITY) != null && project.ext.additionalDensities.containsKey(output.getFilter(OutputFile.DENSITY))) {
+            output.processManifest.doFirst {
+                def manifestFile = new File(project.buildDir, "intermediates" + File.separator + "manifests" + File.separator + "density" + File.separator + output.getFilter(OutputFile.DENSITY) + File.separator + variant.buildType.name + File.separator + "AndroidManifest.xml")
+                def manifestText = manifestFile.text
+                for (String density : project.ext.additionalDensities.get(output.getFilter(OutputFile.DENSITY))) {
+                    manifestText = manifestText.replaceAll("</compatible-screens>", "<screen android:screenSize=\"small\" android:screenDensity=\"${density}\" />\n" +
+                            "<screen android:screenSize=\"large\" android:screenDensity=\"${density}\" />\n" +
+                            "<screen android:screenSize=\"xlarge\" android:screenDensity=\"${density}\" />\n" +
+                            "<screen android:screenSize=\"normal\" android:screenDensity=\"${density}\" />\n </compatible-screens>")
+                }
+                manifestFile.text = manifestText
+            }
+        }
+
+
+
+
+
+    }
+}
+
+
+
+//
+//android.applicationVariants.all { variant ->
+//
+//    variant.outputs.each { output ->
+//
+//        def baseDenVersionCode = project.ext.densityCodes.get(output.getFilter(OutputFile.DENSITY))
+//        def baseAbiVersionCode = project.ext.abiCodes.get(output.getFilter(OutputFile.ABI))
+//
+//        if (baseAbiVersionCode != null && baseDenVersionCode != null) {
+//            output.versionCodeOverride = baseDenVersionCode * 100000 + variant.versionCode + baseAbiVersionCode * 1000 //versionCode = ##--***
+//        }
+//
+//
+////        def baseDenVersionCode = project.ext.densityCodes.get(output.getFilter(OutputFile.DENSITY))
+////        if (baseDenVersionCode != null) {
+////            output.versionCodeOverride = baseDenVersionCode * 100000 + variant.versionCode //versionCode = ##--***
+////        }
+//
+//
+//
+////        def baseAbiVersionCode = project.ext.abiCodes.get(output.getFilter(OutputFile.ABI))
+////
+////        if (baseAbiVersionCode != null ) {
+////            output.versionCodeOverride = variant.versionCode + baseAbiVersionCode * 1000 //versionCode = ##--***
+////        }
+//
+//
+//    }
+//}
+
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -27,4 +124,5 @@ dependencies {
     compile 'com.android.support:cardview-v7:23.2.1'
     compile 'com.android.support:design:23.2.1'
     compile 'com.google.android.gms:play-services:8.4.0'
+    compile 'io.card:android-sdk:5.4.1'
 }
