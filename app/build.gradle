@@ -8,7 +8,7 @@ android {
         applicationId "com.alvardev.visitcuritiba"
         minSdkVersion 18
         targetSdkVersion 23
-        versionCode 4
+        versionCode 1 //***
         versionName "1.0"
     }
     buildTypes {
@@ -42,7 +42,6 @@ ext.abiCodes = ['armeabi-v7a':21, 'arm64-v8':22, x86:23, x86_64:24 ] //--
 
 import com.android.build.OutputFile
 
-
 android.applicationVariants.all { variant ->
     // assign different version code for each output
 
@@ -52,15 +51,9 @@ android.applicationVariants.all { variant ->
         def baseAbiVersionCode = project.ext.abiCodes.get(output.getFilter(OutputFile.ABI))
 
         if (baseAbiVersionCode != null && baseDenVersionCode != null) {
-            output.versionCodeOverride = baseDenVersionCode * 100000 + variant.versionCode + baseAbiVersionCode * 1000
-            //versionCode = ##--***
+            output.versionCodeOverride = baseAbiVersionCode * 100000 + variant.versionCode + baseDenVersionCode * 1000
+            //versionCode = --##***
         }
-    }
-
-
-    variant.outputs.each { output ->
-
-
 
         if (output.getFilter(OutputFile.DENSITY) != null && project.ext.additionalDensities.containsKey(output.getFilter(OutputFile.DENSITY))) {
             output.processManifest.doFirst {
@@ -75,45 +68,10 @@ android.applicationVariants.all { variant ->
                 manifestFile.text = manifestText
             }
         }
-
-
-
-
-
     }
+
 }
 
-
-
-//
-//android.applicationVariants.all { variant ->
-//
-//    variant.outputs.each { output ->
-//
-//        def baseDenVersionCode = project.ext.densityCodes.get(output.getFilter(OutputFile.DENSITY))
-//        def baseAbiVersionCode = project.ext.abiCodes.get(output.getFilter(OutputFile.ABI))
-//
-//        if (baseAbiVersionCode != null && baseDenVersionCode != null) {
-//            output.versionCodeOverride = baseDenVersionCode * 100000 + variant.versionCode + baseAbiVersionCode * 1000 //versionCode = ##--***
-//        }
-//
-//
-////        def baseDenVersionCode = project.ext.densityCodes.get(output.getFilter(OutputFile.DENSITY))
-////        if (baseDenVersionCode != null) {
-////            output.versionCodeOverride = baseDenVersionCode * 100000 + variant.versionCode //versionCode = ##--***
-////        }
-//
-//
-//
-////        def baseAbiVersionCode = project.ext.abiCodes.get(output.getFilter(OutputFile.ABI))
-////
-////        if (baseAbiVersionCode != null ) {
-////            output.versionCodeOverride = variant.versionCode + baseAbiVersionCode * 1000 //versionCode = ##--***
-////        }
-//
-//
-//    }
-//}
 
 
 dependencies {
