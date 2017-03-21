@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.google.firebase.crash.FirebaseCrash;
 import com.google.firebase.iid.FirebaseInstanceId;
 
@@ -17,6 +19,9 @@ public class LoginActivity extends AppCompatActivity {
     private EditText etName;
     private Button btnLetsGo;
 
+    private Tracker mTracker;
+    private String nameActivity;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,6 +30,22 @@ public class LoginActivity extends AppCompatActivity {
         setActions();
         Log.i(TAG, "Token FCM: " + FirebaseInstanceId.getInstance().getToken());
 //        FirebaseCrash.report(new Exception("My first Android non-fatal error"));
+
+        // Obtain the shared Tracker instance.
+        AnalyticsApplication application = (AnalyticsApplication) getApplication();
+        mTracker = application.getDefaultTracker();
+
+        nameActivity = "login";
+
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.i(TAG, "Setting screen name: " + nameActivity);
+        mTracker.setScreenName(nameActivity);
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     private void setUI(){
@@ -41,6 +62,11 @@ public class LoginActivity extends AppCompatActivity {
                 Log.i(TAG, "O nome é: " + name);
 
                 if (validateName(name)) {
+                    mTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Action")
+                            .setAction("login with: " + name)
+                            .build());
+
                     goToDashboard(name);
                 }
 
