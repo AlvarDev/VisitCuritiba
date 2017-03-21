@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "1084640811009",
+    "firebase_url": "https://visitcuritiba-2cfe5.firebaseio.com",
+    "project_id": "visitcuritiba-2cfe5",
+    "storage_bucket": "visitcuritiba-2cfe5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1084640811009:android:d75a69d82ae2900b",
+        "android_client_info": {
+          "package_name": "com.alvardev.visitcuritiba"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1084640811009-i1r1re4d0iurondov2c6kate15k297nt.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "1084640811009-dab2khsluugl759ms2a35jf7tdpg61cf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDW7GApNMoMOiTr3Wa1Hht9UADmVGbZ7vs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
