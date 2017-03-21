@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.firebase.crash.FirebaseCrash;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 public class LoginActivity extends AppCompatActivity {
@@ -23,6 +24,7 @@ public class LoginActivity extends AppCompatActivity {
         setUI();
         setActions();
         Log.i(TAG, "Token FCM: " + FirebaseInstanceId.getInstance().getToken());
+//        FirebaseCrash.report(new Exception("My first Android non-fatal error"));
     }
 
     private void setUI(){
